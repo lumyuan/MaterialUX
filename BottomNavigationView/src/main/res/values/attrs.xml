@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+    <declare-styleable name="material_bottom_navigation">
+        <attr name="titleSize" format="dimension"/>
+        <attr name="iconColorFilter" format="color"/>
+        <attr name="titleColor" format="color"/>
+    </declare-styleable>
+
+</resources>

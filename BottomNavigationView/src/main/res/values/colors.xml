@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <color name="title_color">#FF000000</color>
+    <color name="seed">#FF0099FF</color>
+    <color name="backgroundColor">#FFFFFFFF</color>
+</resources>
