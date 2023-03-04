@@ -272,12 +272,12 @@ class BottomNavigationView : FrameLayout {
                 positionOffsetPixels: Int
             ) {
 
-                println("position: $position\t\tpositionOffset: $positionOffset\t\tpositionOffsetPixels: $positionOffsetPixels")
+//                println("position: $position\t\tpositionOffset: $positionOffset\t\tpositionOffsetPixels: $positionOffsetPixels")
 
                 if (!isClick){
                     if (positionOffset == 0f) {
 
-                        val tl = centerOffset + (itemWidth * position) + (itemWidth * positionOffset)
+                        val tl = centerOffset + (itemWidth * position)
                         val tr = tl + indicatorWith
                         iLeft = tl
                         iRight = tr
@@ -292,8 +292,6 @@ class BottomNavigationView : FrameLayout {
                                 view.iconAnimation(1f)
                             }
                         }
-
-
 
                         positionData.value = position
 
