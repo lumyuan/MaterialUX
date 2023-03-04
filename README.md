@@ -13,15 +13,18 @@
  ```
 2. 导入依赖
 * 模块：Core(必须)、BottomNavigationView、TopBar...
+* 版本：[![](https://jitpack.io/v/lumyuan/MaterialUX.svg)](https://jitpack.io/#lumyuan/MaterialUX)
 ```gradle
-implementation 'com.github.lumyuan.MaterialUX:TopBar:v1.0.4' //必须
+// Java 项目必须
+implementation 'androidx.core:core-ktx:1.9.0'
+implementation 'com.github.lumyuan.MaterialUX:TopBar:{version-name}' //组件库必须
 
-//可选
-implementation 'com.github.lumyuan.MaterialUX:BottomNavigationView:v1.0.4'
-implementation 'com.github.lumyuan.MaterialUX:Core:v1.0.4'
+//可选模块
+implementation 'com.github.lumyuan.MaterialUX:BottomNavigationView:{version-name}'
+implementation 'com.github.lumyuan.MaterialUX:Core:{version-name}'
 ```
 
-# 使用：查阅<a href="https://github.com/lumyuan/MaterialUX/blob/main/app/src/main/java/io/github/lumyuan/ux/MainActivity.java">app/src/main/java/io/github/lumyuan/ux/MainActivity.java</a>
+## 代码：查阅<a href="https://github.com/lumyuan/MaterialUX/blob/main/app/src/main/java/io/github/lumyuan/ux/MainActivity.java">app/src/main/java/io/github/lumyuan/ux/MainActivity.java</a>
 
 # License
 ```license

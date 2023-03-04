@@ -178,6 +178,13 @@ class TopBar : FrameLayout {
 
         setBackgroundColor(Color.parseColor(context.getString(R.color.backgroundColor)))
 
+        firstMenu.setOnClickListener {
+            firstMenuClickListener(it, positionLiveData.value ?: 0)
+        }
+
+        secondsMenu.setOnClickListener {
+            secondsMenuClickListener(it, positionLiveData.value ?: 0)
+        }
     }
 
     fun setupViewpager(viewpager: ViewPager) {

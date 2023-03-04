@@ -22,6 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="@dimen/dp_35"
         android:elevation="@dimen/dp_8"/>
 
     <io.github.lumyuan.ux.bottomnavigationview.widget.BottomNavigationView
@@ -30,6 +31,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:elevation="@dimen/dp_8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.widget.Toast;
+
+import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        ImmersionBar.with(this)
+                .transparentStatusBar()
+                .transparentNavigationBar()
+                .statusBarDarkFont(true)
+                .navigationBarDarkIcon(true)
+                .keyboardEnable(true)
+                .init();
 
         pages.add(
                 new PagerAdapterForFragment.Page(
@@ -74,13 +85,19 @@ public class MainActivity extends AppCompatActivity {
                         R.drawable.ic_mine
                 )
         );
+
+        //设置数控
         binding.topBar.setupData(topBarItems);
+        //绑定ViewPager
         binding.topBar.setupViewpager(binding.viewpager);
 
+
+        //创建导航按钮
+        //推荐数量：3~5，太多会挤压内部view，太少有点空
         BottomNavigationView.ItemView v1 = binding.navigationView.newItemView();
-        v1.setText("首页");
-        v1.setImageResource(R.drawable.ic_home);
-        binding.navigationView.addItemView(v1);
+        v1.setText("首页"); //导航条设置标题
+        v1.setImageResource(R.drawable.ic_home); //设置导航条图标
+        binding.navigationView.addItemView(v1); //将导航条添加到导航栏
 
         BottomNavigationView.ItemView v2 = binding.navigationView.newItemView();
         v2.setText("模块");
@@ -92,8 +109,19 @@ public class MainActivity extends AppCompatActivity {
         v3.setImageResource(R.drawable.ic_mine);
         binding.navigationView.addItemView(v3);
 
+        //导航栏绑定ViewPager
         binding.navigationView.setupViewpager(binding.viewpager);
 
+        //TopBar两个按钮的点击事件
+        binding.topBar.setFirstMenuOnClickListener(((view, position) -> {
+            Toast.makeText(this, "当前位置：" + (position + 1), Toast.LENGTH_SHORT).show();
+            return null;
+        }));
+
+        binding.topBar.setSecondsMenuOnClickListener(((view, position) -> {
+            Toast.makeText(this, "当前位置：" + (position + 1), Toast.LENGTH_SHORT).show();
+            return null;
+        }));
     }
 
     @Override
