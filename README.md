@@ -13,7 +13,15 @@
  ```
 2. 导入依赖
 * 模块：Core(必须)、BottomNavigationView、TopBar...
+```gradle
+implementation 'com.github.lumyuan.MaterialUX:TopBar:v1.0.4' //必须
 
+//可选
+implementation 'com.github.lumyuan.MaterialUX:BottomNavigationView:v1.0.4'
+implementation 'com.github.lumyuan.MaterialUX:Core:v1.0.4'
+```
+
+# 使用：查阅<a href="https://github.com/lumyuan/MaterialUX/blob/main/app/src/main/java/io/github/lumyuan/ux/MainActivity.java">app/src/main/java/io/github/lumyuan/ux/MainActivity.java</a>
 
 # License
 ```license
