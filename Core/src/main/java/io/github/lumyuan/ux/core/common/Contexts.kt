@@ -1,4 +1,4 @@
-package io.github.lumyuan.ux.bottomnavigationview.common
+package io.github.lumyuan.ux.core.common
 
 import android.content.Context
 import android.graphics.Point

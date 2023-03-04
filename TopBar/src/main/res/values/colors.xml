@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+    <color name="titleColor">#FF1C1B1F</color>
+    <color name="subtitleColor">#FF616161</color>
+    <color name="menuColor">#FF1C1B1F</color>
+    <color name="backgroundColor">#FFFFFFFF</color>
+
+</resources>

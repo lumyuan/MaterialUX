@@ -1,7 +1,5 @@
 package io.github.lumyuan.ux.bottomnavigationview.widget
 
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -14,7 +12,6 @@ import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
@@ -26,19 +23,15 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.view.setMargins
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.MODE_FIXED
-import io.github.lumyuan.ux.bottomnavigationview.LiveData
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import io.github.lumyuan.ux.core.LiveData
 import io.github.lumyuan.ux.bottomnavigationview.R
-import io.github.lumyuan.ux.bottomnavigationview.common.dip2px
-import io.github.lumyuan.ux.bottomnavigationview.common.sp2px
+import io.github.lumyuan.ux.core.common.*
 import kotlin.math.max
 import kotlin.properties.Delegates
 
-
-class NavigationView : FrameLayout {
+class BottomNavigationView : FrameLayout {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -92,13 +85,13 @@ class NavigationView : FrameLayout {
         //索引变化
         positionData.observe {
             it?.let {
-                if (viewPager == null) {
+                if (isClick) {
                     items.indices.onEach { index ->
                         val view = items[index].view
                         view.select(it == index)
                     }
                     runIndicatorAnimation(it)
-                } else {
+                }else {
                     viewPager?.currentItem = it
                 }
                 onItemSelectListener(it, items[it].view)
@@ -109,16 +102,19 @@ class NavigationView : FrameLayout {
     private var onItemSelectListener: (position: Int, view: View) -> Unit = { _, _ -> }
 
     fun setOnItemSelectListener(onItemSelectListener: (position: Int, view: View) -> Unit) {
-        this.onItemSelectListener = onItemSelectListener
+            this.onItemSelectListener = onItemSelectListener
     }
 
+    private var isClick = true
     private fun initItem() {
         itemLayout.removeAllViews()
         items.indices.onEach {
             itemLayout.addView(
                 items[it].view.apply {
                     this.setOnClickListener { v ->
-                        positionData.value = it
+                        isClick = true
+                        setCurrentItem(it)
+                        viewPager?.currentItem = it
                     }
                 },
                 LinearLayout.LayoutParams(
@@ -151,18 +147,25 @@ class NavigationView : FrameLayout {
         this.style = Paint.Style.FILL
     }
     private val indicatorRectF = RectF()
+
     //单个item宽度
     private var itemWidth = 0f
+
     //指示器宽度
     private var indicatorWith = 0f
+
     //居中偏移
     private var centerOffset = 0f
+
     //指示器y坐标
     private var iY = 0f
+
     //指示器高度
     private var indicatorHeight = 0f
+
     //左顶点
     private var iLeft = 0f
+
     //右顶点
     private var iRight = 0f
     override fun onDraw(canvas: Canvas) {
@@ -173,7 +176,6 @@ class NavigationView : FrameLayout {
             this.top = iY
             this.bottom = iY + indicatorHeight
         }
-        println("绘制了：$indicatorRectF")
         val radius = indicatorHeight * .5f
         canvas.drawRoundRect(indicatorRectF, radius, radius, paintIndicator)
     }
@@ -195,7 +197,7 @@ class NavigationView : FrameLayout {
         lr = Runnable {
             ValueAnimator.ofFloat(iLeft, tl).apply {
                 interpolator = AccelerateDecelerateInterpolator()
-                duration = this@NavigationView.duration
+                duration = this@BottomNavigationView.duration
                 addUpdateListener {
                     it.animatedValue?.apply {
                         val v = this.toString().toFloat()
@@ -209,7 +211,7 @@ class NavigationView : FrameLayout {
         rr = Runnable {
             ValueAnimator.ofFloat(iRight, tr).apply {
                 interpolator = AccelerateDecelerateInterpolator()
-                duration = this@NavigationView.duration
+                duration = this@BottomNavigationView.duration
                 addUpdateListener {
                     it.animatedValue?.apply {
                         val v = this.toString().toFloat()
@@ -241,7 +243,7 @@ class NavigationView : FrameLayout {
     fun newItemView() = ItemView(context).apply {
         this.setColorFilter(iconColorFilter)
         this.view.titleView.setTextColor(textColor)
-        this.view.titleView.textSize = this@NavigationView.textSize
+        this.view.titleView.textSize = this@BottomNavigationView.textSize
     }
 
     fun removeItemView(position: Int) {
@@ -257,7 +259,113 @@ class NavigationView : FrameLayout {
         positionData.value = position
     }
 
-    fun getCurrentItem() = positionData.value ?: 0
+    private var oldOffset = 0f
+    private var newPosition = 0
+    private var state = 0
+    private var next: Int? = null
+    fun setupViewpager(viewpager: ViewPager) {
+        this.viewPager = viewpager
+        viewpager.addOnPageChangeListener(object : OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+
+                println("position: $position\t\tpositionOffset: $positionOffset\t\tpositionOffsetPixels: $positionOffsetPixels")
+
+                if (!isClick){
+                    if (positionOffset == 0f) {
+
+                        val tl = centerOffset + (itemWidth * position) + (itemWidth * positionOffset)
+                        val tr = tl + indicatorWith
+                        iLeft = tl
+                        iRight = tr
+
+                        items.indices.onEach { index ->
+                            val view = items[index].view
+                            if (position == index){
+                                view.titleAnimation(1f)
+                                view.iconAnimation(0f)
+                            }else {
+                                view.titleAnimation(0f)
+                                view.iconAnimation(1f)
+                            }
+                        }
+
+
+
+                        positionData.value = position
+
+                        next = null
+                    } else {
+                        if (next == null) {
+                            next = if (oldOffset < positionOffset){
+                                val n = position + 1
+                                if (n > items.size - 1){
+                                    items.size - 1
+                                }else {
+                                    n
+                                }
+                            }else {
+                                val n = position - 1
+                                if (n < 0){
+                                    0
+                                }else {
+                                    n
+                                }
+                            }
+                        }
+
+                        val oldView = items[position].view
+                        val nextView = items[next ?: 0].view
+
+                        if (position < (next?.toFloat() ?: 0f)) {
+
+                            oldView.titleAnimation(1 - positionOffset)
+                            oldView.iconAnimation(positionOffset)
+
+                            nextView.titleAnimation(positionOffset)
+                            nextView.iconAnimation(1 - positionOffset)
+
+                            val tl = centerOffset + (itemWidth * position) + (itemWidth * positionOffset)
+                            val tr = tl + indicatorWith
+                            iLeft = tl
+                            iRight = tr
+                        }else {
+
+                            oldView.titleAnimation(positionOffset)
+                            oldView.iconAnimation(1 - positionOffset)
+
+                            nextView.titleAnimation(1 - positionOffset)
+                            nextView.iconAnimation(positionOffset)
+
+                            val tl = centerOffset + itemWidth * position
+                            val tr = tl + indicatorWith
+                            iLeft = tl
+                            iRight = tr
+                        }
+                    }
+                    oldOffset = positionOffset
+                    invalidate()
+                }
+            }
+
+            override fun onPageSelected(position: Int) {
+
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                this@BottomNavigationView.state = state
+                if (state == 1){
+                    isClick = false
+                }
+            }
+
+        })
+    }
+
+    fun getCurrentItem() = viewPager?.currentItem ?: positionData.value ?: 0
 
     class ItemView(context: Context) {
 
@@ -338,7 +446,7 @@ class NavigationView : FrameLayout {
         }
 
         var animationDuration = 500L
-        var offsetAnimationDuration = 500L
+        var offsetAnimationDuration = 5L
 
         private fun initView() {
             layoutParams =
@@ -405,80 +513,68 @@ class NavigationView : FrameLayout {
             }.start()
         }
 
-        private fun iconAnimation(offset: Float) {
-            //位移
-            ObjectAnimator.ofFloat(iconView, "translationY", iconView.height * (offset - 1)).apply {
-                duration = offsetAnimationDuration
-            }.start()
-            //渐变
-            ObjectAnimator.ofFloat(iconView, "alpha", offset).apply {
-                duration = offsetAnimationDuration
-            }.start()
-            //缩放
-            ObjectAnimator.ofFloat(iconView, "scaleX", .5f + offset * .5f).apply {
-                duration = offsetAnimationDuration
-            }.start()
-            ObjectAnimator.ofFloat(iconView, "scaleY", .5f + offset * .5f).apply {
-                duration = offsetAnimationDuration
-            }.start()
+        fun iconAnimation(offset: Float) {
+            iconView.apply {
+                translationY = -height * (1 - offset)
+                alpha = offset
+                val scale = .5f + offset * .5f
+                scaleX = scale
+                scaleY = scale
+            }
         }
 
-        private fun iconAnimation(visible: Boolean) {
+        fun iconAnimation(visible: Boolean) {
             ObjectAnimator.ofFloat(
                 iconView,
                 "translationY",
-                if (visible) 0f else -iconView.height.toFloat()
+                iconView.translationY, if (visible) 0f else -iconView.height.toFloat()
             ).apply {
                 duration = animationDuration
                 interpolator = AccelerateInterpolator()
             }.start()
-            ObjectAnimator.ofFloat(iconView, "alpha", if (visible) 1f else 0f).apply {
+            ObjectAnimator.ofFloat(iconView, "alpha", iconView.alpha, if (visible) 1f else 0f).apply {
                 duration = animationDuration
                 interpolator = AccelerateInterpolator()
             }.start()
-            ObjectAnimator.ofFloat(iconView, "scaleX", if (visible) 1f else .5f).apply {
+            ObjectAnimator.ofFloat(iconView, "scaleX", iconView.scaleX, if (visible) 1f else .5f).apply {
                 duration = animationDuration
                 interpolator = AccelerateInterpolator()
             }.start()
-            ObjectAnimator.ofFloat(iconView, "scaleY", if (visible) 1f else .5f).apply {
+            ObjectAnimator.ofFloat(iconView, "scaleY", iconView.scaleY, if (visible) 1f else .5f).apply {
                 duration = animationDuration
                 interpolator = AccelerateInterpolator()
             }.start()
         }
 
-        private fun titleAnimation(offset: Float) {
-            ObjectAnimator.ofFloat(titleView, "translationY", offset * titleView.height).apply {
-                duration = offsetAnimationDuration
-            }.start()
-            ObjectAnimator.ofFloat(titleView, "alpha", offset).apply {
-                duration = offsetAnimationDuration
-            }.start()
-            ObjectAnimator.ofFloat(titleView, "scaleX", .5f + offset * .5f).apply {
-                duration = offsetAnimationDuration
-            }.start()
-            ObjectAnimator.ofFloat(titleView, "scaleY", .5f + offset * .5f).apply {
-                duration = offsetAnimationDuration
-            }.start()
+        fun titleAnimation(offset: Float) {
+            titleView.apply {
+                translationY = (1 - offset) * titleView.height
+                alpha = offset
+                val scale = .5f + (offset) * .5f
+                scaleX = scale
+                scaleY = scale
+            }
         }
 
-        private fun titleAnimation(visible: Boolean) {
+        fun titleAnimation(visible: Boolean) {
             ObjectAnimator.ofFloat(
                 titleView,
                 "translationY",
+                titleView.translationY,
                 if (visible) 0f else titleView.height.toFloat()
             ).apply {
                 duration = animationDuration
                 interpolator = AccelerateInterpolator()
             }.start()
-            ObjectAnimator.ofFloat(titleView, "alpha", if (visible) 1f else 0f).apply {
+            ObjectAnimator.ofFloat(titleView, "alpha", titleView.alpha,  if (visible) 1f else 0f).apply {
                 duration = animationDuration
                 interpolator = AccelerateInterpolator()
             }.start()
-            ObjectAnimator.ofFloat(titleView, "scaleX", if (visible) 1f else .5f).apply {
+            ObjectAnimator.ofFloat(titleView, "scaleX", titleView.scaleX, if (visible) 1f else .5f).apply {
                 duration = animationDuration
                 interpolator = AccelerateInterpolator()
             }.start()
-            ObjectAnimator.ofFloat(titleView, "scaleY", if (visible) 1f else .5f).apply {
+            ObjectAnimator.ofFloat(titleView, "scaleY", titleView.scaleY, if (visible) 1f else .5f).apply {
                 duration = animationDuration
                 interpolator = AccelerateInterpolator()
             }.start()

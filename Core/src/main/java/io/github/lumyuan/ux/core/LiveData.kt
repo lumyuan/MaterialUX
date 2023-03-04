@@ -1,4 +1,4 @@
-package io.github.lumyuan.ux.bottomnavigationview
+package io.github.lumyuan.ux.core
 
 class LiveData<LD> {
 
