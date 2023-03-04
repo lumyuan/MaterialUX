@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 )
         );
 
-        //设置数控
+        //设置标题栏数据
         binding.topBar.setupData(topBarItems);
         //绑定ViewPager
         binding.topBar.setupViewpager(binding.viewpager);
