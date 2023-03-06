@@ -29,7 +29,7 @@ implementation 'com.github.lumyuan.MaterialUX:GroundGlassView:{version-name}'
 
 # License
 ```
-https://github.com/lumyuan/ly-file
+https://github.com/lumyuan/MaterialUX
 Copyright 2023 lumyuan
 
    Licensed under the Apache License, Version 2.0 (the "License");
