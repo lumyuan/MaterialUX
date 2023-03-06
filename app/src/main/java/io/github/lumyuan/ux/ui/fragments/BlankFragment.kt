@@ -1,11 +1,19 @@
 package io.github.lumyuan.ux.ui.fragments
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.cardview.widget.CardView
 import io.github.lumyuan.ux.R
+import io.github.lumyuan.ux.core.common.dip2px
+import io.github.lumyuan.ux.databinding.FragmentBlankBinding
+import java.util.Random
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,12 +38,13 @@ class BlankFragment : Fragment() {
         }
     }
 
+    private lateinit var binding: FragmentBlankBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank, container, false)
+        binding = FragmentBlankBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     companion object {
@@ -57,4 +66,29 @@ class BlankFragment : Fragment() {
                 }
             }
     }
+
+    private val d = 1500L
+
+    private val handler = Handler(Looper.getMainLooper())
+    override fun onResume() {
+        super.onResume()
+        val rt = object : Runnable {
+            override fun run() {
+                val random = Random()
+                ObjectAnimator.ofFloat(binding.moveCard, "translationX", random.nextInt(400).toFloat() * (random.nextInt(3) - 1)).apply{
+                    this.duration = d
+                    interpolator = AccelerateDecelerateInterpolator()
+                }.start()
+                ObjectAnimator.ofFloat(binding.moveCard, "translationY", random.nextInt(400).toFloat() * (random.nextInt(3) - 1)).apply {
+                    duration = d
+                    interpolator = AccelerateDecelerateInterpolator()
+                }.start()
+                handler.postDelayed(this, d)
+            }
+
+        }
+        handler.removeCallbacks(rt)
+        handler.post(rt)
+    }
+
 }

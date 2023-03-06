@@ -19,7 +19,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -51,6 +51,7 @@ dependencies {
     implementation project(':Core')
     implementation project(':BottomNavigationView')
     implementation project(':TopBar')
+    implementation project(':GroundGlassView')
 
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
 }

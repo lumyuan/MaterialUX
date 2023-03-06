@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+    <declare-styleable name="GroundGlassView">
+        <attr format="dimension" name="blurRadius"/>
+        <attr format="float" name="downSampleFactor"/>
+        <attr format="color" name="overlayColor"/>
+    </declare-styleable>
+
+</resources>
