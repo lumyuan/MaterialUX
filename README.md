@@ -1,5 +1,5 @@
 # MaterialUX
-一个基于androidx的质感UI、UX组件库
+一个基于androidx的质感UI、UX组件库（基于Kotlin）
 
 # 使用
 1. 在你的项目下的build.gradle文件或项目下的settings.gradle文件中：
@@ -17,11 +17,11 @@
 ```gradle
 // Java 项目必须
 implementation 'androidx.core:core-ktx:1.9.0'
-implementation 'com.github.lumyuan.MaterialUX:TopBar:{version-name}' //组件库必须
+implementation 'com.github.lumyuan.MaterialUX:Core:{version-name}' //组件库必须
 
 //可选模块
 implementation 'com.github.lumyuan.MaterialUX:BottomNavigationView:{version-name}'
-implementation 'com.github.lumyuan.MaterialUX:Core:{version-name}'
+implementation 'com.github.lumyuan.MaterialUX:TopBar:{version-name}'
 ```
 
 ## 代码：查阅<a href="https://github.com/lumyuan/MaterialUX/blob/main/app/src/main/java/io/github/lumyuan/ux/MainActivity.java">app/src/main/java/io/github/lumyuan/ux/MainActivity.java</a>
