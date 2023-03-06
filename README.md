@@ -1,5 +1,5 @@
 # MaterialUX
-一个基于androidx的质感UI、UX组件库（基于Kotlin）
+一个基于androidx的质感UI、UX组件库（基于Kotlin），<a href="https://github.com/lumyuan/MaterialUX/releases">下载预览APK</a>
 
 # 使用
 1. 在你的项目下的build.gradle文件或项目下的settings.gradle文件中：
