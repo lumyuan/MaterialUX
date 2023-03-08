@@ -1,6 +1,8 @@
 package io.github.lumyuan.ux.core.animation
 
 import android.animation.ObjectAnimator
+import android.app.Application
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.view.HapticFeedbackConstants
@@ -24,6 +26,13 @@ private val interpolator = DecelerateInterpolator()
  * @copyright 2023 lumyuan
  * View触感反馈扩展函数
  */
+
+private var isVibrate = true
+
+fun Context.setVibration(isVibration: Boolean) {
+    isVibrate = isVibration
+}
+
 fun View.setOnFeedbackListener(
     clickable: Boolean = false/*是否开启点击波纹*/,
     callOnLongClick: Boolean = false/*是否响应长按事件*/,
@@ -35,14 +44,14 @@ fun View.setOnFeedbackListener(
     var isLong = false
     val longTouchRunnable = Runnable {
         isLong = true
-        vibrationLong(this, isVibration)
+        vibrationLong(this, isVibration && isVibrate)
         cancel = false
 //        onUp(this)
     }
     if (clickable) {
         isClickable = true
     }
-    setOnTouchListener(object : View.OnTouchListener {
+    setOnTouchListener(object : OnTouchListener {
         override fun onTouch(v: View, event: MotionEvent): Boolean {
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
@@ -54,7 +63,7 @@ fun View.setOnFeedbackListener(
                             click(v)
                         }
                     }
-                    vibrationUp(v, isVibration)
+                    vibrationUp(v, isVibration && isVibrate)
                     onUp(v)
                     handler.removeCallbacks(longTouchRunnable)
                     return if (!clickable) {
@@ -94,7 +103,7 @@ fun View.setOnFeedbackListener(
                 MotionEvent.ACTION_DOWN -> {
                     cancel = true
                     onDown(v)
-                    vibrationDown(v, isVibration)
+                    vibrationDown(v, isVibration && isVibrate)
                     if (callOnLongClick) {
                         handler.postDelayed(
                             longTouchRunnable, onLongTime
