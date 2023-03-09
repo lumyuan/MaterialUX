@@ -23,6 +23,7 @@ implementation 'com.github.lumyuan.MaterialUX:Core:{version-name}' //组件库�
 implementation 'com.github.lumyuan.MaterialUX:BottomNavigationView:{version-name}'
 implementation 'com.github.lumyuan.MaterialUX:TopBar:{version-name}'
 implementation 'com.github.lumyuan.MaterialUX:GroundGlassView:{version-name}'
+implementation 'com.github.lumyuan.MaterialUX:CircleSeekBar:{version-name}'
 ```
 
 ## 代码：查阅<a href="https://github.com/lumyuan/MaterialUX/blob/main/app/src/main/java/io/github/lumyuan/ux/MainActivity.java">app/src/main/java/io/github/lumyuan/ux/MainActivity.java</a>
