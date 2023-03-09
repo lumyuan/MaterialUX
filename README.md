@@ -12,7 +12,7 @@
 	}
  ```
 2. 导入依赖
-* 模块：Core(必须)、BottomNavigationView、TopBar、GroundGlassView，更多组件开发中...
+* 模块：Core(必须)、BottomNavigationView、TopBar、GroundGlassView、CircleSeekBar，更多组件开发中...
 * 版本：[![](https://jitpack.io/v/lumyuan/MaterialUX.svg)](https://jitpack.io/#lumyuan/MaterialUX)
 ```gradle
 // Java 项目必须
