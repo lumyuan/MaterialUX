@@ -67,7 +67,7 @@ class BlankFragment : Fragment() {
             }
     }
 
-    private val d = 1500L
+    private val d = 2000L
 
     private val handler = Handler(Looper.getMainLooper())
     override fun onResume() {
@@ -83,6 +83,7 @@ class BlankFragment : Fragment() {
                     duration = d
                     interpolator = AccelerateDecelerateInterpolator()
                 }.start()
+                binding.circularFlow.setProgress(random.nextInt(101).toFloat())
                 handler.postDelayed(this, d)
             }
 

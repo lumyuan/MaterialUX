@@ -52,6 +52,7 @@ dependencies {
     implementation project(':BottomNavigationView')
     implementation project(':TopBar')
     implementation project(':GroundGlassView')
+    implementation project(':CircleSeekBar')
 
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
 }

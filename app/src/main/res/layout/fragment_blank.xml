@@ -1,34 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.BlankFragment">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/dp_100"
-        android:layout_height="@dimen/dp_100"
-        app:cardCornerRadius="50dp"
-        app:cardBackgroundColor="#FF0000"
-        android:layout_centerInParent="true"
-        android:id="@+id/moveCard"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/dp_200"
-        android:layout_height="@dimen/dp_200"
-        app:cardCornerRadius="@dimen/dp_12"
-        android:layout_centerInParent="true"
-        app:cardBackgroundColor="@android:color/transparent">
-
-        <!--实时模糊视图，毛玻璃效果-->
-        <io.github.lumyuan.ux.groundglass.widget.GroundGlassView
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_125"/>
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:blurRadius="@dimen/dp_35"
-            app:downSampleFactor="4"
-            app:overlayColor="#AAFFFFFF"/>
+            android:layout_height="wrap_content">
 
-    </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="@dimen/dp_100"
+                app:cardCornerRadius="50dp"
+                app:cardBackgroundColor="#FF0000"
+                android:layout_centerInParent="true"
+                android:id="@+id/moveCard"/>
 
-</RelativeLayout>
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/dp_200"
+                android:layout_height="@dimen/dp_200"
+                app:cardCornerRadius="@dimen/dp_12"
+                android:layout_centerInParent="true"
+                app:cardBackgroundColor="@android:color/transparent"
+                android:layout_margin="@dimen/dp_50">
+
+                <!--实时模糊视图，毛玻璃效果-->
+                <io.github.lumyuan.ux.groundglass.widget.GroundGlassView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:blurRadius="@dimen/dp_35"
+                    app:downSampleFactor="4"
+                    app:overlayColor="#AAFFFFFF"/>
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/circle_seek_bar"
+            android:layout_margin="@dimen/dp_16"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <io.github.lumyuan.ux.circleseekbar.widget.CircleSeekBar
+                android:layout_width="@dimen/dp_200"
+                android:layout_height="@dimen/dp_200"
+                android:id="@+id/circularFlow"
+                app:maxProgress="100"
+                app:mode="stroke"
+                app:progress="25"
+                app:progressWidth="@dimen/dp_20"
+                app:sProgressWidth="@dimen/dp_20"
+                app:progressColor="@color/seed"
+                app:sProgressColor="#FFEEEEEE"
+                app:textSize="@dimen/sp_25"
+                app:textColor="@color/seed"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_80"/>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
