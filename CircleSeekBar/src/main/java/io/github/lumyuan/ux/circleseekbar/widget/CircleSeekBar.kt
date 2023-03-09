@@ -407,6 +407,7 @@ class CircleSeekBar: View {
         }.start()
     }
 
+    fun getProgress() = mCurrentAngle * mMaxProgress / 360f
     /**
      * 设置进度画笔着色方式
      *

@@ -172,12 +172,19 @@ private fun vibrationLong(view: View, isVibration: Boolean) {
 private var animatorX: ObjectAnimator? = null
 private var animatorY: ObjectAnimator? = null
 
+private var rotationVibrate = true
+
+fun View.setRotationVibration(isVibration: Boolean){
+    rotationVibrate = isVibration
+}
+
 /**
  * 3D触摸动画
  * @param maxAngle 最大偏移角度
  */
 fun View.setOnTouchAnimationToRotation(
-    maxAngle: Float = 20F
+    maxAngle: Float = 20F,
+    isVibration: Boolean = rotationVibrate
 ) {
     var mRotationX: Float
     var mRotationY: Float
@@ -211,10 +218,16 @@ fun View.setOnTouchAnimationToRotation(
             }
 
             MotionEvent.ACTION_UP -> {
-                resetState(v)
+                resetState(v, isVibration)
                 mRotationX = 0f
                 mRotationY = 0f
                 performClick()
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                resetState(v, isVibration)
+                mRotationX = 0f
+                mRotationY = 0f
             }
         }
         true
@@ -255,18 +268,59 @@ private fun startRotationY(view: View, `value`: Float, duration: Long = 50) {
     animatorY?.start()
 }
 
-private fun resetState(view: View) {
+private fun resetState(view: View, isVibration: Boolean) {
+    var vX = -1
+    var lastVX = -1
+    var lastX = view.rotationX
+
+    var vY = -1
+    var lastVY = -1
+    var lastY = view.rotationY
     animatorX?.end()
     animatorY?.end()
     animatorX = ObjectAnimator.ofFloat(view, "rotationX", 0f).apply {
         duration = 750
         interpolator = OvershootInterpolator()
+        addUpdateListener {
+            val f = it.animatedValue as Float
+            if (lastX > f){
+                vX = 0
+            }
+            if (lastX < f){
+                vX = 1
+            }
+            if (lastVX != vX){
+                simulatedOverBounce(view, isVibration)
+            }
+            lastVX = vX
+            lastX = f
+        }
     }
     animatorX?.start()
 
     animatorY = ObjectAnimator.ofFloat(view, "rotationY", 0f).apply {
         duration = 750
         interpolator = BounceInterpolator()
+        addUpdateListener {
+            val f = it.animatedValue as Float
+            if (lastY > f){
+                vY = 0
+            }
+            if (lastY < f){
+                vY = 1
+            }
+            if (lastVY != vY){
+                simulatedOverBounce(view, isVibration)
+            }
+            lastVY = vY
+            lastY = f
+        }
     }
     animatorY?.start()
+}
+
+private fun simulatedOverBounce(view: View, isVibration: Boolean) {
+    if (isVibration) {
+        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+    }
 }

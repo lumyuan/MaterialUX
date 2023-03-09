@@ -9,8 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import io.github.lumyuan.ux.R
+import io.github.lumyuan.ux.core.animation.setOnFeedbackListener
+import io.github.lumyuan.ux.core.animation.setOnTouchAnimationToRotation
 import io.github.lumyuan.ux.core.common.dip2px
 import io.github.lumyuan.ux.databinding.FragmentBlankBinding
 import java.util.Random
@@ -44,6 +47,31 @@ class BlankFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBlankBinding.inflate(layoutInflater)
+        //触摸动画
+        binding.blurCard.setOnTouchAnimationToRotation(20f)
+        //点击反馈事件
+        binding.circularFlow.setOnFeedbackListener {
+            Toast.makeText(it.context, "${binding.circularFlow.getProgress()}", Toast.LENGTH_SHORT).show()
+        }
+
+        val rt = object : Runnable {
+            override fun run() {
+                val random = Random()
+                ObjectAnimator.ofFloat(binding.moveCard, "translationX", random.nextInt(400).toFloat() * (random.nextInt(3) - 1)).apply{
+                    this.duration = d
+                    interpolator = AccelerateDecelerateInterpolator()
+                }.start()
+                ObjectAnimator.ofFloat(binding.moveCard, "translationY", random.nextInt(400).toFloat() * (random.nextInt(3) - 1)).apply {
+                    duration = d
+                    interpolator = AccelerateDecelerateInterpolator()
+                }.start()
+                binding.circularFlow.setProgress(random.nextInt(101).toFloat())
+                handler.postDelayed(this, d)
+            }
+
+        }
+        handler.removeCallbacks(rt)
+        handler.post(rt)
         return binding.root
     }
 
@@ -70,26 +98,5 @@ class BlankFragment : Fragment() {
     private val d = 2000L
 
     private val handler = Handler(Looper.getMainLooper())
-    override fun onResume() {
-        super.onResume()
-        val rt = object : Runnable {
-            override fun run() {
-                val random = Random()
-                ObjectAnimator.ofFloat(binding.moveCard, "translationX", random.nextInt(400).toFloat() * (random.nextInt(3) - 1)).apply{
-                    this.duration = d
-                    interpolator = AccelerateDecelerateInterpolator()
-                }.start()
-                ObjectAnimator.ofFloat(binding.moveCard, "translationY", random.nextInt(400).toFloat() * (random.nextInt(3) - 1)).apply {
-                    duration = d
-                    interpolator = AccelerateDecelerateInterpolator()
-                }.start()
-                binding.circularFlow.setProgress(random.nextInt(101).toFloat())
-                handler.postDelayed(this, d)
-            }
-
-        }
-        handler.removeCallbacks(rt)
-        handler.post(rt)
-    }
 
 }

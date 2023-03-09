@@ -22,7 +22,7 @@
                 android:layout_width="@dimen/dp_100"
                 android:layout_height="@dimen/dp_100"
                 app:cardCornerRadius="50dp"
-                app:cardBackgroundColor="#FF0000"
+                app:cardBackgroundColor="@color/seed"
                 android:layout_centerInParent="true"
                 android:id="@+id/moveCard"/>
 
@@ -32,6 +32,7 @@
                 app:cardCornerRadius="@dimen/dp_12"
                 android:layout_centerInParent="true"
                 app:cardBackgroundColor="@android:color/transparent"
+                android:id="@+id/blurCard"
                 android:layout_margin="@dimen/dp_50">
 
                 <!--实时模糊视图，毛玻璃效果-->
