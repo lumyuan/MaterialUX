@@ -12,7 +12,7 @@
 	}
  ```
 2. 导入依赖
-* 模块：Core(必须)、BottomNavigationView、TopBar、GroundGlassView，更多组件开发中...
+* 模块：Core(必须)、BottomNavigationView、TopBar、GroundGlassView、CircleSeekBar，更多组件开发中...
 * 版本：[![](https://jitpack.io/v/lumyuan/MaterialUX.svg)](https://jitpack.io/#lumyuan/MaterialUX)
 ```gradle
 // Java 项目必须
@@ -23,6 +23,7 @@ implementation 'com.github.lumyuan.MaterialUX:Core:{version-name}' //组件库�
 implementation 'com.github.lumyuan.MaterialUX:BottomNavigationView:{version-name}'
 implementation 'com.github.lumyuan.MaterialUX:TopBar:{version-name}'
 implementation 'com.github.lumyuan.MaterialUX:GroundGlassView:{version-name}'
+implementation 'com.github.lumyuan.MaterialUX:CircleSeekBar:{version-name}'
 ```
 
 ## 代码：查阅<a href="https://github.com/lumyuan/MaterialUX/blob/main/app/src/main/java/io/github/lumyuan/ux/MainActivity.java">app/src/main/java/io/github/lumyuan/ux/MainActivity.java</a>
