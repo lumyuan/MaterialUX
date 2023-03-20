@@ -1,25 +1,26 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    namespace 'io.github.lumyuan.ux'
+    namespace 'io.github.lumyuan.ux.overscroll'
     compileSdk 33
 
     defaultConfig {
-        applicationId "io.github.lumyuan.ux"
         minSdk 19
         targetSdk 33
+
         versionCode libsVersionCode
         versionName libsVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -30,30 +31,17 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
-    buildFeatures {
-        viewBinding true
-    }
-
 }
 
 dependencies {
 
-    implementation fileTree(dir: 'libs', includes: ['*.aar', '*.jar'])
-
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation project(':Core')
-    implementation project(':BottomNavigationView')
-    implementation project(':TopBar')
-    implementation project(':GroundGlassView')
-    implementation project(':CircleSeekBar')
-    implementation project(':OverScrollView')
 
-    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
 }

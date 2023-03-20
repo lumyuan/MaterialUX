@@ -174,7 +174,7 @@ private var animatorY: ObjectAnimator? = null
 
 private var rotationVibrate = true
 
-fun View.setRotationVibration(isVibration: Boolean){
+fun Context.setRotationVibration(isVibration: Boolean){
     rotationVibrate = isVibration
 }
 

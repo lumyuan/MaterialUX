@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        libsVersionName = '1.0.8'
-        libsVersionCode = 8
+        libsVersionName = '1.0.9'
+        libsVersionCode = 9
     }
 }
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
