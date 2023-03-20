@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager()
                 )
         );
+        
+        binding.viewpager.setOffscreenPageLimit(pages.size());
 
         topBarItems.add(
                 new TopBar.Item(
