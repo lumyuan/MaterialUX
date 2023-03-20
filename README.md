@@ -14,7 +14,7 @@
 	}
  ```
 2. 导入依赖
-* 模块：Core(必须)、BottomNavigationView、TopBar、GroundGlassView、CircleSeekBar，更多组件开发中...
+* 模块：Core(必须)、BottomNavigationView、TopBar、GroundGlassView、CircleSeekBar、OverScrollView，更多组件开发中...
 * 版本：[![](https://jitpack.io/v/lumyuan/MaterialUX.svg)](https://jitpack.io/#lumyuan/MaterialUX)（版本名前面记得加v，如：v1.0.1）
 ```gradle
 implementation 'androidx.core:core-ktx:1.9.0' // Java 项目必须
