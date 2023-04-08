@@ -27,10 +27,10 @@ private val interpolator = DecelerateInterpolator()
  * View触感反馈扩展函数
  */
 
-private var isVibrate = true
+private var isGlobalVibrate = true
 
 fun Context.setVibration(isVibration: Boolean) {
-    isVibrate = isVibration
+    isGlobalVibrate = isVibration
 }
 
 fun View.setOnFeedbackListener(
@@ -44,7 +44,7 @@ fun View.setOnFeedbackListener(
     var isLong = false
     val longTouchRunnable = Runnable {
         isLong = true
-        vibrationLong(this, isVibration && isVibrate)
+        vibrationLong(this, isVibration && isGlobalVibrate)
         cancel = false
 //        onUp(this)
     }
@@ -63,7 +63,7 @@ fun View.setOnFeedbackListener(
                             click(v)
                         }
                     }
-                    vibrationUp(v, isVibration && isVibrate)
+                    vibrationUp(v, isVibration && isGlobalVibrate)
                     onUp(v)
                     handler.removeCallbacks(longTouchRunnable)
                     return if (!clickable) {
@@ -102,8 +102,9 @@ fun View.setOnFeedbackListener(
 
                 MotionEvent.ACTION_DOWN -> {
                     cancel = true
+                    isLong = false
                     onDown(v)
-                    vibrationDown(v, isVibration && isVibrate)
+                    vibrationDown(v, isVibration && isGlobalVibrate)
                     if (callOnLongClick) {
                         handler.postDelayed(
                             longTouchRunnable, onLongTime
@@ -172,19 +173,13 @@ private fun vibrationLong(view: View, isVibration: Boolean) {
 private var animatorX: ObjectAnimator? = null
 private var animatorY: ObjectAnimator? = null
 
-private var rotationVibrate = true
-
-fun Context.setRotationVibration(isVibration: Boolean){
-    rotationVibrate = isVibration
-}
-
 /**
  * 3D触摸动画
  * @param maxAngle 最大偏移角度
  */
 fun View.setOnTouchAnimationToRotation(
     maxAngle: Float = 20F,
-    isVibration: Boolean = rotationVibrate
+    isVibration: Boolean = isGlobalVibrate
 ) {
     var mRotationX: Float
     var mRotationY: Float
@@ -280,7 +275,7 @@ private fun resetState(view: View, isVibration: Boolean) {
     animatorY?.end()
     animatorX = ObjectAnimator.ofFloat(view, "rotationX", 0f).apply {
         duration = 750
-        interpolator = OvershootInterpolator()
+        interpolator = BounceInterpolator()
         addUpdateListener {
             val f = it.animatedValue as Float
             if (lastX > f){
