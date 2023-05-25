@@ -54,6 +54,7 @@ dependencies {
     implementation project(':GroundGlassView')
     implementation project(':CircleSeekBar')
     implementation project(':OverScrollView')
+    implementation project(':CleverSeekBar')
 
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
 }

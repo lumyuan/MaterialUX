@@ -1,6 +1,7 @@
 package io.github.lumyuan.ux.ui.fragments
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -44,6 +45,7 @@ class BlankFragment : Fragment() {
     }
 
     private lateinit var binding: FragmentBlankBinding
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,7 +69,9 @@ class BlankFragment : Fragment() {
                     duration = d
                     interpolator = AccelerateDecelerateInterpolator()
                 }.start()
-                binding.circularFlow.setProgress(random.nextInt(101).toFloat())
+                val progress = random.nextInt(101).toFloat()
+                binding.circularFlow.setProgress(progress)
+                binding.seekbar.progress = progress
                 handler.postDelayed(this, d)
             }
 
@@ -78,6 +82,10 @@ class BlankFragment : Fragment() {
             activity?.apply {
                 startActivity(Intent(this, KTBasicActivity::class.java))
             }
+        }
+
+        binding.seekbar.setOnSeekBarChangeListener { _, progress ->
+            binding.seekbarProgressText.text = "拖动条进度：${String.format("%.2f", progress)}"
         }
         return binding.root
     }
@@ -102,7 +110,7 @@ class BlankFragment : Fragment() {
             }
     }
 
-    private val d = 2000L
+    private val d = 4000L
 
     private val handler = Handler(Looper.getMainLooper())
 

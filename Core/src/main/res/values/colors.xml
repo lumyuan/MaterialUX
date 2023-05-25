@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-
+    <color name="seed">#FF0099FF</color>
+    <color name="progressBackgroundColor">#FFEEEEEE</color>
+    <color name="white">#FFFFFFFF</color>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<io.github.lumyuan.ux.overscroll.OverScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -82,6 +82,29 @@
             android:id="@+id/startButton"
             android:layout_margin="@dimen/large"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekbarProgressText"
+            android:layout_marginStart="@dimen/large"
+            android:layout_marginTop="@dimen/large"/>
+
+        <io.github.lumyuan.ux.cleverseekbar.widget.CleverSeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekbar"
+            app:barWidth="6dp"
+            app:barColor="#FF93410C"
+            app:barBackgroundColor="#FFEEEEEE"
+            app:barProgressRadius="3dp"
+            app:barThumbRadius="9dp"
+            app:barThumbColor="#FFFFFFFF"
+            app:progress="50"
+            app:minProgress="0"
+            app:maxProgress="100"
+            app:duration="400"
+            android:layout_margin="@dimen/large" />
+
         <ImageView
             android:layout_width="@dimen/dp_200"
             android:layout_height="@dimen/dp_200"
@@ -128,4 +151,4 @@
 
     </LinearLayout>
 
-</io.github.lumyuan.ux.overscroll.OverScrollView>
+</androidx.core.widget.NestedScrollView>

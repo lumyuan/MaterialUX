@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="material_clever_seekbar">
+        <attr name="barWidth" format="dimension"/>
+        <attr name="barColor" format="color"/>
+        <attr name="barBackgroundColor" format="color"/>
+        <attr name="barProgressRadius" format="dimension"/>
+        <attr name="barThumbRadius" format="dimension"/>
+        <attr name="barThumbColor" format="color"/>
+        <attr name="progress" format="float"/>
+        <attr name="minProgress" format="float"/>
+        <attr name="maxProgress" format="float"/>
+        <attr name="duration" format="integer"/>
+    </declare-styleable>
+</resources>
