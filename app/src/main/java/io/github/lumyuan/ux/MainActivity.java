@@ -1,10 +1,9 @@
 package io.github.lumyuan.ux;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import android.os.Bundle;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -124,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "当前位置：" + (position + 1), Toast.LENGTH_SHORT).show();
             return null;
         }));
+
     }
 
     @Override

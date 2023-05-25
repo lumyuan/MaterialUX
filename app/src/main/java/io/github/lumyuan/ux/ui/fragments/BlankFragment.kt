@@ -1,6 +1,7 @@
 package io.github.lumyuan.ux.ui.fragments
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import io.github.lumyuan.ux.KTBasicActivity
 import io.github.lumyuan.ux.R
 import io.github.lumyuan.ux.core.animation.setOnFeedbackListener
 import io.github.lumyuan.ux.core.animation.setOnTouchAnimationToRotation
@@ -72,6 +74,11 @@ class BlankFragment : Fragment() {
         }
         handler.removeCallbacks(rt)
         handler.post(rt)
+        binding.startButton.setOnClickListener {
+            activity?.apply {
+                startActivity(Intent(this, KTBasicActivity::class.java))
+            }
+        }
         return binding.root
     }
 

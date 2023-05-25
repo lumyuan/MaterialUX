@@ -11,8 +11,6 @@ android {
         minSdk 19
         targetSdk 33
 
-        versionCode libsVersionCode
-        versionName libsVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

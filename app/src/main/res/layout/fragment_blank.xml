@@ -75,6 +75,13 @@
 
         </LinearLayout>
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_basic_activity"
+            android:id="@+id/startButton"
+            android:layout_margin="@dimen/large"/>
+
         <ImageView
             android:layout_width="@dimen/dp_200"
             android:layout_height="@dimen/dp_200"
