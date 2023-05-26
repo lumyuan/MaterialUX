@@ -84,6 +84,7 @@ class BlankFragment : Fragment() {
             }
         }
 
+        //设置拖动监听
         binding.seekbar.setOnSeekBarChangeListener { _, progress ->
             binding.seekbarProgressText.text = "拖动条进度：${String.format("%.2f", progress)}"
         }

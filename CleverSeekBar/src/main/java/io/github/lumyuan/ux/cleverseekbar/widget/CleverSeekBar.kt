@@ -7,7 +7,9 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.os.Build
 import android.util.AttributeSet
+import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -17,7 +19,7 @@ import io.github.lumyuan.ux.cleverseekbar.widget.CleverSeekBars.OnSeekBarChangeL
 import io.github.lumyuan.ux.core.common.dip2px
 
 @SuppressLint("Recycle", "CustomViewStyleable", "ResourceType")
-class CleverSeekBar : View {
+open class CleverSeekBar : View {
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -32,47 +34,59 @@ class CleverSeekBar : View {
     var barWidth: Float = 0f
         set(value) {
             field = value
-            postInvalidate()
+            invalidate()
         }
+
+    private var barThumbWidth: Float = 0f
+    private var barThumbMaxWidth: Float = 0f
+    private var viewHeight: Float = 0f
+    private var thumbFillWidth: Float = 0f
+
     var barColor: Int = Color.TRANSPARENT
         set(value) {
             field = value
-            postInvalidate()
+            invalidate()
         }
     var barBackgroundColor: Int = Color.TRANSPARENT
         set(value) {
             field = value
-            postInvalidate()
+            invalidate()
         }
 
+    private var progressRadius: Float = 0f
     var barProgressRadius: Float = 0f
         set(value) {
             field = value
-            postInvalidate()
+            progressRadius = value
+            invalidate()
         }
 
+    private var thumbRadius: Float = 0f
+    private var barThumbMaxRadius: Float = 0f
     var barThumbRadius: Float = 0f
         set(value) {
             field = value
-            postInvalidate()
+            thumbRadius = value
+            barThumbMaxRadius = value * 3
+            invalidate()
         }
 
     var barThumbColor: Int = 0
         set(value) {
             field = value
-            postInvalidate()
+            invalidate()
         }
 
     var progressMin: Float = 0f
         set(value) {
             field = value
-            postInvalidate()
+            invalidate()
         }
 
     var progressMax: Float = 0f
         set(value) {
             field = value
-            postInvalidate()
+            invalidate()
         }
 
     var changeAnimationDuration: Long = 400
@@ -86,7 +100,7 @@ class CleverSeekBar : View {
                     val v = it.animatedValue as Float
                     field = v
                     seekBarChangeListener?.onChanged(this@CleverSeekBar, v)
-                    postInvalidate()
+                    invalidate()
                 }
             }.start()
         }
@@ -109,6 +123,12 @@ class CleverSeekBar : View {
                 )
             ).toFloat()
         )
+
+        barThumbWidth = barWidth * 3f
+        barThumbMaxWidth = barThumbWidth * 1.5f
+        thumbFillWidth = barWidth
+
+        viewHeight = barThumbMaxWidth + elevationTarget * 2
 
         barColor = typedArray.getColor(
             R.styleable.material_clever_seekbar_barColor,
@@ -189,6 +209,9 @@ class CleverSeekBar : View {
         RectF()
     }
 
+    private var elevation = 0f
+    private val elevationTarget = 8f
+
     /**
      * 获取真实的进度百分比
      */
@@ -204,46 +227,53 @@ class CleverSeekBar : View {
         thumbStrokePaint.color = barColor
         thumbFillPaint.color = barThumbColor
 
-        val barHeight = barWidth * 3
-        val progressWidth = (width - barHeight) * getRealProgressPercentage() + barWidth * 1.5f
+        val bgPadding = viewHeight * .5f
+        val barRadius = barWidth * .5f
+
+        val thumbFillRadius = thumbFillWidth * .5f
+
+        val thumbWidthRadius = barThumbWidth * .5f
+
+        val progressWidth = (width - viewHeight) * getRealProgressPercentage() + bgPadding
 
         //绘制背景
         rectF.apply {
-            this.left = barWidth * 1.5f
-            this.top = barHeight * .5f - barWidth * .5f
-            this.right = width - barWidth * 1.5f
+            this.left = bgPadding
+            this.top = bgPadding - barRadius
+            this.right = this.left + (width - viewHeight)
             this.bottom = this.top + barWidth
         }
-        canvas.drawRoundRect(rectF, barProgressRadius, barProgressRadius, bgPaint)
+        canvas.drawRoundRect(rectF, progressRadius, progressRadius, bgPaint)
 
         //绘制进度条
         rectF.apply {
-            this.left = barWidth * 1.5f
-            this.top = barHeight * .5f - barWidth * .5f
+            this.left = bgPadding
+            this.top = bgPadding - barRadius
             this.right = progressWidth
             this.bottom = this.top + barWidth
         }
-        canvas.drawRoundRect(rectF, barProgressRadius, barProgressRadius, progressPaint)
+        canvas.drawRoundRect(rectF, progressRadius, progressRadius, progressPaint)
 
         //绘制ThumbStroke
-        val thumbStrokeWidthRadius = barWidth * 1.5f
-        rectF.apply {
-            this.left = progressWidth - thumbStrokeWidthRadius
-            this.top = 0f
-            this.right = progressWidth + thumbStrokeWidthRadius
-            this.bottom = barHeight
-        }
-        canvas.drawRoundRect(rectF, barThumbRadius, barThumbRadius, thumbStrokePaint)
-
-        //绘制Thumb
-        val thumbWidthRadius = barWidth * .5f
         rectF.apply {
             this.left = progressWidth - thumbWidthRadius
-            this.top = barHeight * .5f - barWidth * .5f
-            this.right = progressWidth + thumbWidthRadius
-            this.bottom = this.top + barWidth
+            this.top = bgPadding - thumbWidthRadius
+            this.right = this.left + barThumbWidth
+            this.bottom = this.top + barThumbWidth
         }
-        canvas.drawRoundRect(rectF, barProgressRadius, barProgressRadius, thumbFillPaint)
+
+        //绘制阴影
+        thumbStrokePaint.setShadowLayer(elevation, 0f, 3f, Color.GRAY)
+        canvas.drawRoundRect(rectF, thumbRadius, thumbRadius, thumbStrokePaint)
+
+        //绘制Thumb
+        rectF.apply {
+            this.left = progressWidth - thumbFillRadius
+            this.top = bgPadding - thumbFillRadius
+            this.right = this.left + thumbFillWidth
+            this.bottom = this.top + thumbFillWidth
+        }
+        canvas.drawRoundRect(rectF, progressRadius, progressRadius, thumbFillPaint)
 
     }
 
@@ -269,7 +299,7 @@ class CleverSeekBar : View {
             MeasureSpec.EXACTLY -> height = specSize
             MeasureSpec.AT_MOST -> height = width / 10
             MeasureSpec.UNSPECIFIED -> {
-                height = (barWidth * 3.1f).toInt()
+                height = (viewHeight + elevationTarget + .5f).toInt()
             }
         }
 
@@ -282,7 +312,6 @@ class CleverSeekBar : View {
     }
 
     private var dt = 0L
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val barHeight = barWidth * 3
@@ -298,10 +327,63 @@ class CleverSeekBar : View {
         }
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                progress = getRealProgress((rx - barWidth) / progressWidth)
-                invalidate()
+                val realProgress = getRealProgress((rx - barWidth) / progressWidth)
+                progress = if (realProgress < progressMin) 0f else if (realProgress > progressMax) progressMax else realProgress
                 dt = changeAnimationDuration
                 parent?.requestDisallowInterceptTouchEvent(true)
+
+                vibrationDown()
+
+                //elevation
+                ValueAnimator.ofFloat(elevation, elevationTarget).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        elevation = v
+                    }
+                }.start()
+
+                //thumb stroke
+                ValueAnimator.ofFloat(barThumbWidth, barThumbMaxWidth).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        barThumbWidth = v
+                    }
+                }.start()
+
+                //thumb stroke radius
+                ValueAnimator.ofFloat(thumbRadius, barThumbMaxRadius).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        thumbRadius = v
+                    }
+                }.start()
+
+                //thumb fill
+                ValueAnimator.ofFloat(thumbFillWidth, barWidth * 1.5f).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        thumbFillWidth = v
+                    }
+                }.start()
+
+                //progress radius
+                ValueAnimator.ofFloat(progressRadius, barProgressRadius * 1.5f).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        progressRadius = v
+                        invalidate()
+                    }
+                }.start()
             }
 
             MotionEvent.ACTION_MOVE -> {
@@ -312,7 +394,49 @@ class CleverSeekBar : View {
             }
 
             MotionEvent.ACTION_UP -> {
-                invalidate()
+                vibrationUp()
+
+                ValueAnimator.ofFloat(elevation, 0f).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        elevation = v
+                    }
+                }.start()
+                ValueAnimator.ofFloat(barThumbWidth, barWidth * 3).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        barThumbWidth = v
+                    }
+                }.start()
+                ValueAnimator.ofFloat(thumbRadius, barThumbRadius).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        thumbRadius = v
+                    }
+                }.start()
+                ValueAnimator.ofFloat(thumbFillWidth, barWidth).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        thumbFillWidth = v
+                    }
+                }.start()
+                ValueAnimator.ofFloat(progressRadius, barProgressRadius).apply {
+                    duration = 400
+                    interpolator = changeAnimationInterpolator
+                    addUpdateListener {
+                        val v = it.animatedValue as Float
+                        progressRadius = v
+                        invalidate()
+                    }
+                }.start()
                 changeAnimationDuration = dt
                 performClick()
                 parent?.requestDisallowInterceptTouchEvent(false)
@@ -323,5 +447,17 @@ class CleverSeekBar : View {
             }
         }
         return true
+    }
+
+    private fun vibrationDown() {
+        val flag =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) HapticFeedbackConstants.GESTURE_START else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) HapticFeedbackConstants.KEYBOARD_PRESS else HapticFeedbackConstants.VIRTUAL_KEY
+        performHapticFeedback(flag)
+    }
+
+    private fun vibrationUp() {
+        val flag =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) HapticFeedbackConstants.GESTURE_END else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) HapticFeedbackConstants.KEYBOARD_RELEASE else HapticFeedbackConstants.VIRTUAL_KEY
+        performHapticFeedback(flag)
     }
 }

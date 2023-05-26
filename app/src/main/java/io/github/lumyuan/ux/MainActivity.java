@@ -1,6 +1,9 @@
 package io.github.lumyuan.ux;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +13,8 @@ import com.gyf.immersionbar.ImmersionBar;
 import java.util.ArrayList;
 
 import io.github.lumyuan.ux.bottomnavigationview.widget.BottomNavigationView;
+import io.github.lumyuan.ux.cleverseekbar.widget.CleverSeekBar;
+import io.github.lumyuan.ux.cleverseekbar.widget.CleverSeekBars;
 import io.github.lumyuan.ux.databinding.ActivityMainBinding;
 import io.github.lumyuan.ux.topbar.widget.TopBar;
 import io.github.lumyuan.ux.ui.PagerAdapterForFragment;
@@ -123,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "当前位置：" + (position + 1), Toast.LENGTH_SHORT).show();
             return null;
         }));
-
     }
 
     @Override

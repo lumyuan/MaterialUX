@@ -103,7 +103,7 @@
             app:minProgress="0"
             app:maxProgress="100"
             app:duration="400"
-            android:layout_margin="@dimen/large" />
+            android:layout_margin="@dimen/dp_16"/>
 
         <ImageView
             android:layout_width="@dimen/dp_200"
