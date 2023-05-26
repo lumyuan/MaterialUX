@@ -26,6 +26,7 @@ implementation 'com.github.lumyuan.MaterialUX:TopBar:{version-name}'
 implementation 'com.github.lumyuan.MaterialUX:GroundGlassView:{version-name}'
 implementation 'com.github.lumyuan.MaterialUX:CircleSeekBar:{version-name}'
 implementation 'com.github.lumyuan.MaterialUX:OverScrollView:{version-name}'
+implementation 'com.github.lumyuan.MaterialUX:CleverSeekBar:{version-name}'
 ```
 
 ## 代码：查阅<a href="https://github.com/lumyuan/MaterialUX/blob/main/app/src/main/java/io/github/lumyuan/ux/MainActivity.java">app/src/main/java/io/github/lumyuan/ux/MainActivity.java</a>
