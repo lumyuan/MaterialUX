@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        libsVersionName = '1.0.13'
+        libsVersionName = '1.0.13.1'
         libsVersionCode = 13
     }
 }
