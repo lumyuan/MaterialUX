@@ -1,18 +1,16 @@
 package io.github.lumyuan.ux.core.animation
 
 import android.animation.ObjectAnimator
-import android.app.Application
 import android.content.Context
-import android.graphics.Color
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.animation.BounceInterpolator
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.OvershootInterpolator
-import kotlin.math.abs
 
 const val duration = 150L
 const val onLongTime = 750L
@@ -40,13 +38,15 @@ fun View.setOnFeedbackListener(
     onLongClick: (View) -> Unit = {},
     click: (View) -> Unit = {}
 ) {
+    val myHandler = Handler(Looper.getMainLooper())
     var cancel = true
     var isLong = false
     val longTouchRunnable = Runnable {
         isLong = true
         vibrationLong(this, isVibration && isGlobalVibrate)
+        onLongClick(this)
         cancel = false
-//        onUp(this)
+        onUp(this)
     }
     if (clickable) {
         isClickable = true
@@ -56,7 +56,13 @@ fun View.setOnFeedbackListener(
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
                     if (isLong) {
-                        onLongClick(this@setOnFeedbackListener)
+                        //onLongClick(this@setOnFeedbackListener)
+                        myHandler.removeCallbacks(longTouchRunnable)
+                        return if (!clickable) {
+                            true
+                        } else {
+                            onTouchEvent(event)
+                        }
                     } else {
                         if (cancel) {
                             performClick()
@@ -65,7 +71,7 @@ fun View.setOnFeedbackListener(
                     }
                     vibrationUp(v, isVibration && isGlobalVibrate)
                     onUp(v)
-                    handler.removeCallbacks(longTouchRunnable)
+                    myHandler.removeCallbacks(longTouchRunnable)
                     return if (!clickable) {
                         true
                     } else {
@@ -79,7 +85,7 @@ fun View.setOnFeedbackListener(
                     if (x < 0 || y < 0 || x > v.measuredWidth || y > v.measuredHeight) {
                         onUp(v)
                         cancel = false
-                        handler.removeCallbacks(longTouchRunnable)
+                        myHandler.removeCallbacks(longTouchRunnable)
                         return if (!clickable) {
                             true
                         } else {
@@ -92,7 +98,7 @@ fun View.setOnFeedbackListener(
                     onUp(v)
                     cancel = false
                     isLong = false
-                    handler.removeCallbacks(longTouchRunnable)
+                    myHandler.removeCallbacks(longTouchRunnable)
                     return if (!clickable) {
                         true
                     } else {
@@ -106,7 +112,7 @@ fun View.setOnFeedbackListener(
                     onDown(v)
                     vibrationDown(v, isVibration && isGlobalVibrate)
                     if (callOnLongClick) {
-                        handler.postDelayed(
+                        myHandler.postDelayed(
                             longTouchRunnable, onLongTime
                         )
                     }

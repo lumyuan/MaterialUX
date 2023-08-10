@@ -54,7 +54,12 @@ class BlankFragment : Fragment() {
         //触摸动画
         binding.blurCard.setOnTouchAnimationToRotation(20f)
         //点击反馈事件
-        binding.circularFlow.setOnFeedbackListener {
+        binding.circularFlow.setOnFeedbackListener(
+            callOnLongClick = true,
+            onLongClick = {
+                Toast.makeText(it.context, "onLongClick: ${binding.circularFlow.getProgress()}", Toast.LENGTH_SHORT).show()
+            }
+        ) {
             Toast.makeText(it.context, "${binding.circularFlow.getProgress()}", Toast.LENGTH_SHORT).show()
         }
 
